@@ -9,7 +9,9 @@ public class HeadTurned : MonoBehaviour {
     public bool headTurnedLeft;
 
     public float headTurnedTime = 3.0f;
-    
+
+    public GameObject exclamation;
+
 	// Use this for initialization
 	void Start () {
         initialYRotation = this.transform.rotation.y;
@@ -27,7 +29,10 @@ public class HeadTurned : MonoBehaviour {
                 headTurnedTime -= Time.deltaTime;
                 if (headTurnedTime <= 0)
                 {
+                    StartCoroutine(enableDuration());
                     Debug.Log("turn left");
+                    headTurnedTime = 3.0f;
+                    headTurnedRight = false;
                 }
             }
         }
@@ -44,7 +49,10 @@ public class HeadTurned : MonoBehaviour {
                 headTurnedTime -= Time.deltaTime;
                 if (headTurnedTime <= 0)
                 {
+                    StartCoroutine(enableDuration());
                     Debug.Log("turn left");
+                    headTurnedTime = 3.0f;
+                    headTurnedLeft = false;
                 }
 
             }
@@ -52,7 +60,14 @@ public class HeadTurned : MonoBehaviour {
         else if (this.transform.rotation.y >= (initialYRotation - 0.25f) && this.transform.rotation.y <= initialYRotation)
         {
             headTurnedLeft = false;
-            headTurnedTime = 3.0f
+            headTurnedTime = 3.0f;
         }
 	}
+
+    IEnumerator enableDuration()
+    {
+        exclamation.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+        exclamation.SetActive(false);
+    }
 }
