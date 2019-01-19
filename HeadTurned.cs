@@ -19,7 +19,7 @@ public class HeadTurned : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (this.transform.rotation.y > (initialYRotation + 25.0f) && this.transform.rotation.y >= initialYRotation)
+        if (this.transform.rotation.y > (initialYRotation + 0.25f) && this.transform.rotation.y >= initialYRotation)
         {
             headTurnedRight = true;
             if (headTurnedRight)
@@ -31,18 +31,28 @@ public class HeadTurned : MonoBehaviour {
                 }
             }
         }
-        else if (this.transform.rotation.y <= (initialYRotation + 25.0f) && this.transform.rotation.y >= initialYRotation)
+        else if (this.transform.rotation.y <= (initialYRotation + 0.25f) && this.transform.rotation.y >= initialYRotation)
         {
             headTurnedRight = false;
             headTurnedTime = 3.0f;
         }
-        if (this.transform.rotation.y < (initialYRotation - 25.0f) && this.transform.rotation.y <= initialYRotation)
+        if (this.transform.rotation.y < (initialYRotation - 0.25f) && this.transform.rotation.y <= initialYRotation)
         {
             headTurnedLeft = true;
+            if (headTurnedLeft)
+            {
+                headTurnedTime -= Time.deltaTime;
+                if (headTurnedTime <= 0)
+                {
+                    Debug.Log("turn left");
+                }
+
+            }
         }
-        else if (this.transform.rotation.y >= (initialYRotation - 25.0f) && this.transform.rotation.y <= initialYRotation)
+        else if (this.transform.rotation.y >= (initialYRotation - 0.25f) && this.transform.rotation.y <= initialYRotation)
         {
             headTurnedLeft = false;
+            headTurnedTime = 3.0f
         }
 	}
 }
