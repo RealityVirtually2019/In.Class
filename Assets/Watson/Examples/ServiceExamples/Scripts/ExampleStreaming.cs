@@ -67,9 +67,15 @@ public class ExampleStreaming : MonoBehaviour
 
     void Start()
     {
-        LogSystem.InstallDefaultReactors();
-        Runnable.Run(CreateService());
+
     }
+
+    public void ReallyStart() {
+        print("starting Watson");
+        LogSystem.InstallDefaultReactors();
+        Runnable.Run(CreateService());    
+    }
+
 
     private IEnumerator CreateService()
     {
@@ -228,10 +234,10 @@ public class ExampleStreaming : MonoBehaviour
             {
                 foreach (var alt in res.alternatives)
                 {
-                    string text = string.Format("{0} ({1}, {2:0.00})\n", alt.transcript, res.final ? "Final" : "Interim", alt.confidence).ToUpper();
-                    string text2 = alt.transcript;
+                    string text = string.Format("{0} ({1}, {2:0.00})\n", alt.transcript, res.final ? "Final" : "Interim", alt.confidence);
+                    string text2 = alt.transcript.Replace("%HESITATION", "...");
                     Log.Debug("ExampleStreaming.OnRecognize()", text2);
-                    ResultsField.GetComponent<TextMeshProUGUI>().text = text2;
+                    ResultsField.GetComponent<Text>().text = text2;
                 }
 
                 if (res.keywords_result != null && res.keywords_result.keyword != null)

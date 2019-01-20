@@ -34,12 +34,12 @@ namespace MagicLeap
         /// </summary>
         void Awake()
         {
-            if (_statusText == null)
-            {
-                Debug.LogError("Error: HandTrackingExample._statusText is not set, disabling script.");
-                enabled = false;
-                return;
-            }
+            //if (_statusText == null)
+            //{
+            //    Debug.LogError("Error: HandTrackingExample._statusText is not set, disabling script.");
+            //    enabled = false;
+            //    return;
+            //}
         }
 
         /// <summary>
@@ -49,12 +49,12 @@ namespace MagicLeap
         {
             if (MLHands.IsStarted)
             {
-                _statusText.text = string.Format(
-                    "Current Hand Gestures\nLeft: {0}, {2}% confidence\nRight: {1}, {3}% confidence",
-                    MLHands.Left.KeyPose.ToString(),
-                    MLHands.Right.KeyPose.ToString(),
-                    (MLHands.Left.KeyPoseConfidence * 100.0f).ToString("n0"),
-                    (MLHands.Right.KeyPoseConfidence * 100.0f).ToString("n0"));
+                //_statusText.text = string.Format(
+                    //"Current Hand Gestures\nLeft: {0}, {2}% confidence\nRight: {1}, {3}% confidence",
+                    //MLHands.Left.KeyPose.ToString(),
+                    //MLHands.Right.KeyPose.ToString(),
+                    //(MLHands.Left.KeyPoseConfidence * 100.0f).ToString("n0"),
+                    //(MLHands.Right.KeyPoseConfidence * 100.0f).ToString("n0"));
             }
         }
         #endregion

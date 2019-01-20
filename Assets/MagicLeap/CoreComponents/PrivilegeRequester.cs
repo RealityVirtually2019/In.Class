@@ -43,6 +43,8 @@ namespace UnityEngine.XR.MagicLeap
             Failed
         }
 
+        bool started;
+
         PrivilegeState _state = PrivilegeState.Off;
 
         /// <summary>
@@ -90,6 +92,7 @@ namespace UnityEngine.XR.MagicLeap
 
         void Start()
         {
+            started = false;
             MLResult result = MLPrivileges.Start();
             if (result.IsOk)
             {
@@ -103,6 +106,12 @@ namespace UnityEngine.XR.MagicLeap
                 OnPrivilegesDone(result);
                 enabled = false;
             }
+            StartCoroutine(StartWatson());
+        }
+
+        System.Collections.IEnumerator StartWatson() {
+            yield return new WaitForSeconds(3);
+            GetComponent<ExampleStreaming>().ReallyStart();
         }
 
         /// <summary>
@@ -218,6 +227,12 @@ namespace UnityEngine.XR.MagicLeap
             {
                 _privilegesGranted.Add(privilegeId);
                 Debug.LogFormat("{0} Privilege Granted", privilegeId);
+                //if(privilegeId == MLPrivilege) {
+                if(!started) {
+                    started = true;
+
+                }
+                //if(privilegeId = 
             }
             else
             {

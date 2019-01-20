@@ -29,7 +29,7 @@ namespace MagicLeap
         {
             set
             {
-                _xOffset.localPosition = new Vector3(value, 0, 0);
+                //_xOffset.localPosition = new Vector3(value, 0, 0);
             }
         }
         #endregion

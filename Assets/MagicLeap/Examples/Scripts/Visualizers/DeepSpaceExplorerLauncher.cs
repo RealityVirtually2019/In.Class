@@ -71,9 +71,10 @@ namespace MagicLeap
         /// </summary>
         void OnEnable()
         {
-            _planetInstance = Instantiate(_planetPrefabAnimator.transform, GetPosition(), Quaternion.identity);
+            //_planetInstance = Instantiate(_planetPrefabAnimator.transform, GetPosition(), Quaternion.identity);
             //_planetInstance = Instantiate(spaceObj, GetPosition(), Quaternion.identity);
-            Instantiate(spaceObj, _planetInstance);
+            //Instantiate(spaceObj, _planetInstance);
+            Instantiate(spaceObj, transform);
         }
 
         /// <summary>

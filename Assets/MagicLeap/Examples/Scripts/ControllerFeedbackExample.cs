@@ -13,6 +13,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
+using UnityEngine.UI;
 
 namespace MagicLeap
 {
@@ -23,6 +24,15 @@ namespace MagicLeap
     [RequireComponent(typeof(ControllerConnectionHandler))]
     public class ControllerFeedbackExample : MonoBehaviour
     {
+
+        public GameObject buttonMenu;
+        private bool menuActive;
+        public GameObject watsonText;
+        public bool watsonBool;
+        public GameObject notification;
+
+        public GameObject clone;
+
         #region Private Variables
         private ControllerConnectionHandler _controllerConnectionHandler;
 
@@ -47,19 +57,31 @@ namespace MagicLeap
         /// </summary>
         void Start()
         {
+            menuActive = false;
+            watsonBool = true;
+
             _controllerConnectionHandler = GetComponent<ControllerConnectionHandler>();
 
             MLInput.OnControllerButtonUp += HandleOnButtonUp;
             MLInput.OnControllerButtonDown += HandleOnButtonDown;
             MLInput.OnTriggerDown += HandleOnTriggerDown;
+            MLInput.OnTriggerUp += MLInput_OnTriggerUp;
         }
 
         /// <summary>
         /// Update controller input based feedback.
         /// </summary>
         void Update()
-        {
+        { 
+
             UpdateLED();
+
+        }
+
+        IEnumerator notifyTeacher(){
+            notification.SetActive(true);
+            yield return new WaitForSeconds(2f);
+            notification.SetActive(false);
         }
 
         /// <summary>
@@ -72,6 +94,7 @@ namespace MagicLeap
                 MLInput.OnTriggerDown -= HandleOnTriggerDown;
                 MLInput.OnControllerButtonDown -= HandleOnButtonDown;
                 MLInput.OnControllerButtonUp -= HandleOnButtonUp;
+                MLInput.OnTriggerUp -= HandleOnTriggerDown;
             }
         }
         #endregion
@@ -119,6 +142,68 @@ namespace MagicLeap
         #endregion
 
         #region Event Handlers
+
+        private void MLInput_OnTriggerUp(byte bte, float fl) {
+            MLInputController controller = _controllerConnectionHandler.ConnectedController;
+
+            RaycastHit rayHit;
+            //Debug.Log("print");
+
+            if (Physics.Raycast(controller.Position, transform.TransformDirection(Vector3.forward), out rayHit, 1000f))
+            {
+                // TURN ON/OFF CC
+                if (rayHit.collider.gameObject.name == "ccButton")
+                {
+                    if (watsonBool)
+                    {
+                        watsonText.GetComponent<Text>().enabled = false;
+                        watsonBool = false;
+                    }
+                    else if (!watsonBool)
+                    {
+                        watsonText.GetComponent<Text>().enabled = true;
+                        watsonBool = true;
+
+                    }
+                }
+                // QUESTION BUTTON
+                if (rayHit.collider.gameObject.name == "questionButton")
+                {
+                    StartCoroutine(notifyTeacher());
+                }
+                //Debug.Log(rayHit.collider.gameObject.name);
+
+                // ROTATE 3D OBJECT
+                if (rayHit.collider.gameObject.name == "rotateButton")
+                {
+                    if (GameObject.Find("Pyramids 1") != null){
+                        clone = GameObject.Find("Pyramids 1");
+                        Vector3 temp = new Vector3(clone.transform.rotation.x,clone.transform.rotation.y, clone.transform.rotation.z);
+                        temp.y += 20f;
+                        //clone.transform.RotateAround(Vector3.forward ,20f);
+                        //clone.transform.rotation.y = temp.y;
+
+
+                    }
+                }
+                //Debug.Log(rayHit.collider.gameObject.name);
+
+                // ROTATE 3D OBJECT
+                if (rayHit.collider.gameObject.name == "scaleButton")
+                {
+                    if (GameObject.Find("Pyramids 1") != null)
+                    {
+                        clone = GameObject.Find("Pyramids 1");
+                        clone.transform.localScale += new Vector3(5F, 5f, 0f);
+
+                    }
+                }
+                //Debug.Log(rayHit.collider.gameObject.name);
+            }
+
+
+        }
+
         /// <summary>
         /// Handles the event for button down.
         /// </summary>
@@ -127,6 +212,22 @@ namespace MagicLeap
         private void HandleOnButtonDown(byte controllerId, MLInputControllerButton button)
         {
             MLInputController controller = _controllerConnectionHandler.ConnectedController;
+
+
+            if (button == MLInputControllerButton.Bumper){
+                if (!menuActive)
+                {
+                    buttonMenu.SetActive(true);
+                    menuActive = true;
+                    //watsonText.SetActive(false);
+                }
+                else {
+                    //watsonText.SetActive(true);
+                    buttonMenu.SetActive(false);
+                    menuActive = false;
+                }
+            }
+
             if (controller != null && controller.Id == controllerId &&
                 button == MLInputControllerButton.Bumper)
             {
